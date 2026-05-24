@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue';
 import { useContext, useWidget } from '@/composables';
-import { useIndustrialStore } from '../store';
 import { STATUS_COLORS, STATUS_LABELS } from '../const';
+import { useIndustrialStore } from '../store';
 import { formatTimestamp } from '../utils';
 import type { LevelSensorWidget } from './types';
 
@@ -11,9 +11,7 @@ const { config, patchConfig } = useWidget.setup<LevelSensorWidget>();
 const store = useIndustrialStore();
 
 const sensor = computed(() =>
-  config.value.sensorId
-    ? store.getLevelSensor(config.value.sensorId)
-    : null,
+  config.value.sensorId ? store.getLevelSensor(config.value.sensorId) : null,
 );
 
 const statusColor = computed(() =>
@@ -21,7 +19,9 @@ const statusColor = computed(() =>
 );
 
 const statusLabel = computed(() =>
-  sensor.value ? STATUS_LABELS[sensor.value.status] ?? sensor.value.status : 'N/C',
+  sensor.value
+    ? STATUS_LABELS[sensor.value.status] ?? sensor.value.status
+    : 'N/C',
 );
 
 const levelColor = computed(() => {
@@ -66,7 +66,10 @@ onUnmounted(() => clearInterval(interval));
       <template v-else>
         <div class="row justify-between items-center q-px-sm q-pt-sm">
           <div class="text-subtitle2 text-bold">{{ sensor.name }}</div>
-          <q-badge :color="statusColor" :label="statusLabel" />
+          <q-badge
+            :color="statusColor"
+            :label="statusLabel"
+          />
         </div>
 
         <div class="row justify-center q-mt-md q-mb-sm">
@@ -76,20 +79,27 @@ onUnmounted(() => clearInterval(interval));
               :style="{ height: sensor.level_pct + '%' }"
               :class="`bg-${levelColor}`"
             />
-            <div class="tank-level-label">{{ sensor.level_pct.toFixed(1) }}%</div>
+            <div class="tank-level-label">
+              {{ sensor.level_pct.toFixed(1) }}%
+            </div>
           </div>
         </div>
 
         <div class="row q-px-sm q-mt-sm">
           <div class="col text-center">
-            <div class="text-h6" :class="`text-${levelColor}`">
+            <div
+              class="text-h6"
+              :class="`text-${levelColor}`"
+            >
               {{ sensor.volume_hl.toFixed(2) }}
             </div>
             <div class="text-caption text-grey">hL</div>
           </div>
           <q-separator vertical />
           <div class="col text-center">
-            <div class="text-h6 text-grey">{{ sensor.volume_liters.toFixed(0) }}</div>
+            <div class="text-h6 text-grey">
+              {{ sensor.volume_liters.toFixed(0) }}
+            </div>
             <div class="text-caption text-grey">L</div>
           </div>
         </div>

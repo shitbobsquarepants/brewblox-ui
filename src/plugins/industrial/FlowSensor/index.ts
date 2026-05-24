@@ -2,7 +2,7 @@ import { Plugin } from 'vue';
 import { useFeatureStore, WidgetFeature } from '@/store/features';
 import { cref } from '@/utils/component-ref';
 import widget from './FlowSensorWidget.vue';
-import { FlowSensorWidget, FlowSensorWidgetConfig } from './types';
+import type { FlowSensorWidgetConfig } from './types';
 
 const plugin: Plugin = {
   install(app) {
@@ -11,10 +11,7 @@ const plugin: Plugin = {
       id: 'FlowSensor',
       title: 'Débitmètre EM',
       component: cref(app, widget),
-      widgetSize: {
-        cols: 4,
-        rows: 3,
-      },
+      widgetSize: { cols: 4, rows: 3 },
       generateConfig: () => ({
         sensorId: null,
         title: 'Débitmètre',

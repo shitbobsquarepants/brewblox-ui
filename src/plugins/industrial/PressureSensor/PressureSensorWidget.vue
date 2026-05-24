@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue';
 import { useContext, useWidget } from '@/composables';
-import { useIndustrialStore } from '../store';
 import { STATUS_COLORS, STATUS_LABELS } from '../const';
+import { useIndustrialStore } from '../store';
 import { formatTimestamp } from '../utils';
 import type { PressureSensorWidget } from './types';
 
@@ -11,9 +11,7 @@ const { config, patchConfig } = useWidget.setup<PressureSensorWidget>();
 const store = useIndustrialStore();
 
 const sensor = computed(() =>
-  config.value.sensorId
-    ? store.getPressureSensor(config.value.sensorId)
-    : null,
+  config.value.sensorId ? store.getPressureSensor(config.value.sensorId) : null,
 );
 
 const statusColor = computed(() =>
@@ -21,12 +19,17 @@ const statusColor = computed(() =>
 );
 
 const statusLabel = computed(() =>
-  sensor.value ? STATUS_LABELS[sensor.value.status] ?? sensor.value.status : 'N/C',
+  sensor.value
+    ? STATUS_LABELS[sensor.value.status] ?? sensor.value.status
+    : 'N/C',
 );
 
 const pressureBarPct = computed(() => {
   if (!sensor.value) return 0;
-  return Math.min(100, (sensor.value.pressure / (config.value.maxPressure || 6)) * 100);
+  return Math.min(
+    100,
+    (sensor.value.pressure / (config.value.maxPressure || 6)) * 100,
+  );
 });
 
 const lastUpdate = computed(() =>
@@ -63,14 +66,21 @@ onUnmounted(() => clearInterval(interval));
       <template v-else>
         <div class="row justify-between items-center q-px-sm q-pt-sm">
           <div class="text-subtitle2 text-bold">{{ sensor.name }}</div>
-          <q-badge :color="statusColor" :label="statusLabel" />
+          <q-badge
+            :color="statusColor"
+            :label="statusLabel"
+          />
         </div>
 
         <div class="row justify-center items-baseline q-mt-md">
-          <span class="text-h3 text-bold">{{ sensor.pressure.toFixed(3) }}</span>
+          <span class="text-h3 text-bold">{{
+            sensor.pressure.toFixed(3)
+          }}</span>
           <span class="text-h6 text-grey q-ml-sm">{{ sensor.unit }}</span>
         </div>
-        <div class="text-caption text-grey text-center q-mb-sm">Pression process</div>
+        <div class="text-caption text-grey text-center q-mb-sm">
+          Pression process
+        </div>
 
         <div class="q-px-sm q-mb-xs">
           <q-linear-progress
@@ -85,9 +95,14 @@ onUnmounted(() => clearInterval(interval));
           </div>
         </div>
 
-        <div v-if="sensor.temperature !== null" class="row justify-center q-mt-sm">
+        <div
+          v-if="sensor.temperature !== null"
+          class="row justify-center q-mt-sm"
+        >
           <div class="text-center">
-            <div class="text-h6 text-orange-4">{{ sensor.temperature?.toFixed(1) }} °C</div>
+            <div class="text-h6 text-orange-4">
+              {{ sensor.temperature?.toFixed(1) }} °C
+            </div>
             <div class="text-caption text-grey">Température process</div>
           </div>
         </div>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue';
 import { useContext, useWidget } from '@/composables';
-import { useIndustrialStore } from '../store';
 import { STATUS_COLORS, STATUS_LABELS } from '../const';
+import { useIndustrialStore } from '../store';
 import { formatTimestamp } from '../utils';
 import type { LevelSwitchWidget } from './types';
 
@@ -11,9 +11,7 @@ const { config, patchConfig } = useWidget.setup<LevelSwitchWidget>();
 const store = useIndustrialStore();
 
 const sensor = computed(() =>
-  config.value.sensorId
-    ? store.getLevelSwitch(config.value.sensorId)
-    : null,
+  config.value.sensorId ? store.getLevelSwitch(config.value.sensorId) : null,
 );
 
 const statusColor = computed(() =>
@@ -21,7 +19,9 @@ const statusColor = computed(() =>
 );
 
 const statusLabel = computed(() =>
-  sensor.value ? STATUS_LABELS[sensor.value.status] ?? sensor.value.status : 'N/C',
+  sensor.value
+    ? STATUS_LABELS[sensor.value.status] ?? sensor.value.status
+    : 'N/C',
 );
 
 const lastUpdate = computed(() =>
@@ -58,7 +58,10 @@ onUnmounted(() => clearInterval(interval));
       <template v-else>
         <div class="row justify-between items-center q-px-sm q-pt-sm">
           <div class="text-subtitle2 text-bold">{{ sensor.name }}</div>
-          <q-badge :color="statusColor" :label="statusLabel" />
+          <q-badge
+            :color="statusColor"
+            :label="statusLabel"
+          />
         </div>
 
         <div class="row justify-around q-mt-lg q-mb-md">

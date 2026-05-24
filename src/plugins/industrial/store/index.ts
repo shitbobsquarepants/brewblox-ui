@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
-import { reactive, computed } from 'vue';
+import { computed, reactive } from 'vue';
 import type {
   FlowSensorState,
-  PressureSensorState,
   LevelSensorState,
   LevelSwitchState,
+  PressureSensorState,
 } from '../types';
 
 export const useIndustrialStore = defineStore('industrialStore', () => {

@@ -2,23 +2,23 @@ import { Plugin } from 'vue';
 import { STATE_TOPIC } from '@/const';
 import { eventbus } from '@/eventbus';
 import { globRegister } from '@/utils/component-ref';
-import { useIndustrialStore } from './store';
 import FlowSensorWidget from './FlowSensor';
-import PressureSensorWidget from './PressureSensor';
 import LevelSensorWidget from './LevelSensor';
 import LevelSwitchWidget from './LevelSwitch';
-import {
-  isFlowSensorState,
-  isPressureSensorState,
-  isLevelSensorState,
-  isLevelSwitchState,
-} from './utils';
+import PressureSensorWidget from './PressureSensor';
+import { useIndustrialStore } from './store';
 import type {
   FlowSensorState,
-  PressureSensorState,
   LevelSensorState,
   LevelSwitchState,
+  PressureSensorState,
 } from './types';
+import {
+  isFlowSensorState,
+  isLevelSensorState,
+  isLevelSwitchState,
+  isPressureSensorState,
+} from './utils';
 
 const plugin: Plugin = {
   install(app) {
@@ -42,7 +42,9 @@ const plugin: Plugin = {
       if (isFlowSensorState(data)) {
         store.updateFlowSensor((data as { data: FlowSensorState }).data);
       } else if (isPressureSensorState(data)) {
-        store.updatePressureSensor((data as { data: PressureSensorState }).data);
+        store.updatePressureSensor(
+          (data as { data: PressureSensorState }).data,
+        );
       } else if (isLevelSensorState(data)) {
         store.updateLevelSensor((data as { data: LevelSensorState }).data);
       } else if (isLevelSwitchState(data)) {
