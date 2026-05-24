@@ -2,12 +2,12 @@ import { Plugin } from 'vue';
 import { useFeatureStore, WidgetFeature } from '@/store/features';
 import { cref } from '@/utils/component-ref';
 import widget from './PressureSensorWidget.vue';
-import { PressureSensorWidget } from './types';
+import { PressureSensorWidget, PressureSensorWidgetConfig } from './types';
 
 const plugin: Plugin = {
   install(app) {
     const featureStore = useFeatureStore();
-    const feature: WidgetFeature<PressureSensorWidget> = {
+    const feature: WidgetFeature<PressureSensorWidgetConfig> = {
       id: 'PressureSensor',
       title: 'Capteur de pression',
       component: cref(app, widget),

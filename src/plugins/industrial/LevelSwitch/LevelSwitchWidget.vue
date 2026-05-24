@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue';
-import { useWidget } from '@/composables';
+import { useContext, useWidget } from '@/composables';
 import { useIndustrialStore } from '../store';
 import { STATUS_COLORS, STATUS_LABELS } from '../const';
 import { formatTimestamp } from '../utils';
-import { LevelSwitchWidget } from './types';
+import type { LevelSwitchWidget } from './types';
 
+const { context } = useContext.setup();
 const { config, patchConfig } = useWidget.setup<LevelSwitchWidget>();
 const store = useIndustrialStore();
 
@@ -60,9 +61,7 @@ onUnmounted(() => clearInterval(interval));
           <q-badge :color="statusColor" :label="statusLabel" />
         </div>
 
-        <!-- Indicateurs TOR -->
         <div class="row justify-around q-mt-lg q-mb-md">
-          <!-- Contact haut -->
           <div class="column items-center">
             <q-icon
               name="arrow_upward"
@@ -81,10 +80,8 @@ onUnmounted(() => clearInterval(interval));
             />
           </div>
 
-          <!-- Séparateur vertical -->
           <q-separator vertical />
 
-          <!-- Contact bas -->
           <div class="column items-center">
             <q-icon
               name="arrow_downward"

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue';
-import { useWidget } from '@/composables';
+import { useContext, useWidget } from '@/composables';
 import { useIndustrialStore } from '../store';
 import { STATUS_COLORS, STATUS_LABELS } from '../const';
 import { formatTimestamp } from '../utils';
-import { PressureSensorWidget } from './types';
+import type { PressureSensorWidget } from './types';
 
+const { context } = useContext.setup();
 const { config, patchConfig } = useWidget.setup<PressureSensorWidget>();
 const store = useIndustrialStore();
 
@@ -66,14 +67,10 @@ onUnmounted(() => clearInterval(interval));
         </div>
 
         <div class="row justify-center items-baseline q-mt-md">
-          <span class="text-h3 text-bold">
-            {{ sensor.pressure.toFixed(3) }}
-          </span>
+          <span class="text-h3 text-bold">{{ sensor.pressure.toFixed(3) }}</span>
           <span class="text-h6 text-grey q-ml-sm">{{ sensor.unit }}</span>
         </div>
-        <div class="text-caption text-grey text-center q-mb-sm">
-          Pression process
-        </div>
+        <div class="text-caption text-grey text-center q-mb-sm">Pression process</div>
 
         <div class="q-px-sm q-mb-xs">
           <q-linear-progress
@@ -88,14 +85,9 @@ onUnmounted(() => clearInterval(interval));
           </div>
         </div>
 
-        <div
-          v-if="sensor.temperature !== null"
-          class="row justify-center q-mt-sm"
-        >
+        <div v-if="sensor.temperature !== null" class="row justify-center q-mt-sm">
           <div class="text-center">
-            <div class="text-h6 text-orange-4">
-              {{ sensor.temperature?.toFixed(1) }} °C
-            </div>
+            <div class="text-h6 text-orange-4">{{ sensor.temperature?.toFixed(1) }} °C</div>
             <div class="text-caption text-grey">Température process</div>
           </div>
         </div>
@@ -116,15 +108,7 @@ onUnmounted(() => clearInterval(interval));
         :options="sensorOpts"
         @update:model-value="(v) => patchConfig({ sensorId: v })"
       />
-      <LabeledField label="Titre">
-        <q-input
-          :model-value="config.title"
-          dense
-          borderless
-          @update:model-value="(v) => patchConfig({ title: String(v) })"
-        />
-      </LabeledField>
-      <LabeledField label="Pression max affichée (bar)">
+      <LabeledField label="Pression max (bar)">
         <q-input
           :model-value="config.maxPressure"
           type="number"

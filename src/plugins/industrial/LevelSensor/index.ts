@@ -2,12 +2,12 @@ import { Plugin } from 'vue';
 import { useFeatureStore, WidgetFeature } from '@/store/features';
 import { cref } from '@/utils/component-ref';
 import widget from './LevelSensorWidget.vue';
-import { LevelSensorWidget } from './types';
+import { LevelSensorWidget, LevelSensorWidgetConfig } from './types';
 
 const plugin: Plugin = {
   install(app) {
     const featureStore = useFeatureStore();
-    const feature: WidgetFeature<LevelSensorWidget> = {
+    const feature: WidgetFeature<LevelSensorWidgetConfig> = {
       id: 'LevelSensor',
       title: 'Niveau de cuve',
       component: cref(app, widget),

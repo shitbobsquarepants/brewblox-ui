@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue';
-import { useWidget } from '@/composables';
+import { useContext, useWidget } from '@/composables';
 import { useIndustrialStore } from '../store';
 import { STATUS_COLORS, STATUS_LABELS } from '../const';
 import { formatTimestamp } from '../utils';
-import { LevelSensorWidget } from './types';
+import type { LevelSensorWidget } from './types';
 
+const { context } = useContext.setup();
 const { config, patchConfig } = useWidget.setup<LevelSensorWidget>();
 const store = useIndustrialStore();
 
@@ -68,20 +69,17 @@ onUnmounted(() => clearInterval(interval));
           <q-badge :color="statusColor" :label="statusLabel" />
         </div>
 
-        <!-- Représentation visuelle de la cuve -->
         <div class="row justify-center q-mt-md q-mb-sm">
           <div class="tank-container">
             <div
               class="tank-fill"
-              :style="{ height: sensor.level_pct + '%', backgroundColor: `var(--q-${levelColor})` }"
+              :style="{ height: sensor.level_pct + '%' }"
+              :class="`bg-${levelColor}`"
             />
-            <div class="tank-level-label">
-              {{ sensor.level_pct.toFixed(1) }}%
-            </div>
+            <div class="tank-level-label">{{ sensor.level_pct.toFixed(1) }}%</div>
           </div>
         </div>
 
-        <!-- Volumes -->
         <div class="row q-px-sm q-mt-sm">
           <div class="col text-center">
             <div class="text-h6" :class="`text-${levelColor}`">
@@ -91,9 +89,7 @@ onUnmounted(() => clearInterval(interval));
           </div>
           <q-separator vertical />
           <div class="col text-center">
-            <div class="text-h6 text-grey">
-              {{ sensor.volume_liters.toFixed(0) }}
-            </div>
+            <div class="text-h6 text-grey">{{ sensor.volume_liters.toFixed(0) }}</div>
             <div class="text-caption text-grey">L</div>
           </div>
         </div>
