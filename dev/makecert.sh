@@ -13,7 +13,7 @@ if [ ! -f minica.pem ]; then
     --volume="$PWD":/cert \
     ghcr.io/brewblox/minica:develop \
     --domains="brew.blox,$(hostname),$(hostname).local,$(hostname).home,localhost" \
-    --ip-addresses="127.0.0.1,$(hostname -I | tr ' ' , | sed 's/,$//')"
+    --ip-addresses="127.0.0.1,192.168.0.19"
 fi
 
 if [ ! -f minica.der ]; then

@@ -84,3 +84,32 @@ services:
   #   labels:
   #     - traefik.enable=false
   #   command: mdns-reflector -fn4 enp8s0 br-${COMPOSE_PROJECT_NAME}
+
+  history:
+    labels:
+      - traefik.http.services.history.loadbalancer.server.port=5000
+      - traefik.http.routers.history.rule=PathPrefix(`/history`)
+      - traefik.http.routers.history.entrypoints=websecure,admin
+      - traefik.http.routers.history.middlewares=cors
+      - traefik.http.routers.history.service=history
+  auth:
+    labels:
+      - traefik.http.services.auth.loadbalancer.server.port=5000
+  sparkey:
+    labels:
+      - traefik.http.services.sparkey.loadbalancer.server.port=5000
+  spock:
+    labels:
+      - traefik.http.services.spock.loadbalancer.server.port=5000
+
+  traefik:
+    environment:
+      - DOCKER_API_VERSION=1.41
+    volumes:
+      - type: bind
+        source: /Users/gaffodiohadrien/.docker/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: ./dev/traefik
+        target: /config
+        read_only: true
