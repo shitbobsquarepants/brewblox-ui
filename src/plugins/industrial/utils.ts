@@ -52,8 +52,10 @@ export function isPhaseControlState(data: unknown): boolean {
     typeof data === 'object' &&
     data !== null &&
     (data as IndustrialStateEvent).type === 'Industrial.state' &&
-    typeof (data as { data?: { zone_id?: unknown } }).data?.zone_id === 'string' &&
-    typeof (data as { data?: { current_step?: unknown } }).data?.current_step === 'number'
+    typeof (data as { data?: { zone_id?: unknown } }).data?.zone_id ===
+      'string' &&
+    typeof (data as { data?: { current_step?: unknown } }).data
+      ?.current_step === 'number'
   );
 }
 
@@ -62,8 +64,10 @@ export function isAgitatorState(data: unknown): boolean {
     typeof data === 'object' &&
     data !== null &&
     (data as IndustrialStateEvent).type === 'Industrial.state' &&
-    typeof (data as { data?: { running?: unknown } }).data?.running === 'boolean' &&
-    typeof (data as { data?: { device_id?: unknown } }).data?.device_id === 'string'
+    typeof (data as { data?: { running?: unknown } }).data?.running ===
+      'boolean' &&
+    typeof (data as { data?: { device_id?: unknown } }).data?.device_id ===
+      'string'
   );
 }
 
@@ -72,8 +76,10 @@ export function isCIPBallState(data: unknown): boolean {
     typeof data === 'object' &&
     data !== null &&
     (data as IndustrialStateEvent).type === 'Industrial.state' &&
-    typeof (data as { data?: { active?: unknown } }).data?.active === 'boolean' &&
-    typeof (data as { data?: { device_id?: unknown } }).data?.device_id === 'string'
+    typeof (data as { data?: { active?: unknown } }).data?.active ===
+      'boolean' &&
+    typeof (data as { data?: { device_id?: unknown } }).data?.device_id ===
+      'string'
   );
 }
 
@@ -82,7 +88,14 @@ export function formatDuration(seconds: number): string {
   const m = Math.floor((seconds % 3600) / 60);
   const s = seconds % 60;
   if (h > 0) {
-    return h + 'h' + String(m).padStart(2, '0') + 'm' + String(s).padStart(2, '0') + 's';
+    return (
+      h +
+      'h' +
+      String(m).padStart(2, '0') +
+      'm' +
+      String(s).padStart(2, '0') +
+      's'
+    );
   }
   return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
 }

@@ -1,8 +1,8 @@
 import type { Plugin } from 'vue';
 import { useFeatureStore, type WidgetFeature } from '@/store/features';
 import { cref } from '@/utils/component-ref';
-import widget from './AgitatorWidget.vue';
 import type { AgitatorWidgetConfig } from '../types';
+import widget from './AgitatorWidget.vue';
 
 const plugin: Plugin = {
   install(app) {
