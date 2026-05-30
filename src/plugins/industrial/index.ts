@@ -6,11 +6,16 @@ import FlowSensorWidget from './FlowSensor';
 import LevelSensorWidget from './LevelSensor';
 import LevelSwitchWidget from './LevelSwitch';
 import PressureSensorWidget from './PressureSensor';
+import PhaseControlWidget from './PhaseControl';
+import AgitatorWidget from './Agitator';
 import { useIndustrialStore } from './store';
 import type {
+  AgitatorState,
+  CIPBallState,
   FlowSensorState,
   LevelSensorState,
   LevelSwitchState,
+  PhaseControlState,
   PressureSensorState,
 } from './types';
 import {
@@ -18,6 +23,9 @@ import {
   isLevelSensorState,
   isLevelSwitchState,
   isPressureSensorState,
+  isPhaseControlState,
+  isAgitatorState,
+  isCIPBallState,
 } from './utils';
 
 const plugin: Plugin = {
@@ -35,6 +43,8 @@ const plugin: Plugin = {
     app.use(PressureSensorWidget);
     app.use(LevelSensorWidget);
     app.use(LevelSwitchWidget);
+    app.use(PhaseControlWidget);
+    app.use(AgitatorWidget);
 
     // Écouter les messages MQTT du service brewblox-industrial
     eventbus.subscribe(`${STATE_TOPIC}/+`);
@@ -42,13 +52,17 @@ const plugin: Plugin = {
       if (isFlowSensorState(data)) {
         store.updateFlowSensor((data as { data: FlowSensorState }).data);
       } else if (isPressureSensorState(data)) {
-        store.updatePressureSensor(
-          (data as { data: PressureSensorState }).data,
-        );
+        store.updatePressureSensor((data as { data: PressureSensorState }).data);
       } else if (isLevelSensorState(data)) {
         store.updateLevelSensor((data as { data: LevelSensorState }).data);
       } else if (isLevelSwitchState(data)) {
         store.updateLevelSwitch((data as { data: LevelSwitchState }).data);
+      } else if (isPhaseControlState(data)) {
+        store.updatePhaseControl((data as { data: PhaseControlState }).data);
+      } else if (isAgitatorState(data)) {
+        store.updateAgitator((data as { data: AgitatorState }).data);
+      } else if (isCIPBallState(data)) {
+        store.updateCIPBall((data as { data: CIPBallState }).data);
       }
     });
   },
