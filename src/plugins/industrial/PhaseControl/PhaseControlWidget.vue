@@ -4,10 +4,11 @@ import { useContext, useWidget } from '@/composables';
 import { eventbus } from '@/eventbus';
 import { useIndustrialStore } from '../store';
 import { formatTimestamp } from '../utils';
-import type { PhaseControlWidgetConfig, PhaseCommand } from '../types';
+import type { PhaseCommand } from '../types';
+import type { PhaseControlWidget } from './types';
 
 const { context } = useContext.setup();
-const { config, patchConfig } = useWidget.setup<PhaseControlWidgetConfig>();
+const { config, patchConfig } = useWidget.setup<PhaseControlWidget>();
 const store = useIndustrialStore();
 
 const phase = computed(() =>

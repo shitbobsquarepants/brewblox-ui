@@ -3,10 +3,10 @@ import { computed, onUnmounted, ref, watch } from 'vue';
 import { useContext, useWidget } from '@/composables';
 import { useIndustrialStore } from '../store';
 import { formatTimestamp } from '../utils';
-import type { AgitatorWidgetConfig } from '../types';
+import type { AgitatorWidget } from './types';
 
 const { context } = useContext.setup();
-const { config, patchConfig } = useWidget.setup<AgitatorWidgetConfig>();
+const { config, patchConfig } = useWidget.setup<AgitatorWidget>();
 const store = useIndustrialStore();
 
 const agitator = computed(() =>
