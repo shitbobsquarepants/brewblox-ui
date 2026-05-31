@@ -16,9 +16,7 @@ import { COLOR_KEY } from '../const';
 
 const { settings, width, height } = usePart.setup();
 
-const color = computed<string>(() =>
-  colorString(settings.value[COLOR_KEY]),
-);
+const color = computed<string>(() => colorString(settings.value[COLOR_KEY]));
 
 const levelPct = computed<number>(
   () => settings.value[LEVEL_KEY] ?? DEFAULT_LEVEL,

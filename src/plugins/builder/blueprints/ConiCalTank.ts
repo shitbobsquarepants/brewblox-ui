@@ -1,5 +1,4 @@
 import { BuilderBlueprint } from '@/plugins/builder/types';
-import { COLOR_KEY } from '../const';
 
 export const CONE_ANGLE_KEY = 'coneAngle';
 export const LEVEL_KEY = 'levelPct';
