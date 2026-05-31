@@ -1,15 +1,15 @@
 import { BuilderBlueprint, BuilderType } from '@/plugins/builder/types';
 import AgitatorMotor from './AgitatorMotor';
-import CIPBall from './CIPBall';
-import ConiCalTank from './ConiCalTank';
 import BeerBottle from './BeerBottle';
 import BridgeTube from './BridgeTube';
 import BuilderLabel from './BuilderLabel';
 import Carboy from './Carboy';
 import CheckValve from './CheckValve';
+import CIPBall from './CIPBall';
 import Coil from './Coil';
 import Condenser from './Condenser';
 import Conical from './Conical';
+import ConiCalTank from './ConiCalTank';
 import CounterflowChiller from './CounterflowChiller';
 import CrossTube from './CrossTube';
 import DigitalBaseDisplay from './DigitalBaseDisplay';
