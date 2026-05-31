@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { ACTIVE_KEY, DEFAULT_SIZE } from '../blueprints/CIPBall';
 import { usePart } from '../composables';
 
@@ -9,6 +10,10 @@ const isActive = computed(() => settings.value[ACTIVE_KEY] ?? false);
 // Pipe enters from top, ball at bottom
 const ballCY = computed(() => height.value - width.value / 2 - 2);
 const ballR = computed(() => width.value / 2 - 3);
+
+function toggleActive(): void {
+  settings.value[ACTIVE_KEY] = !isActive.value;
+}
 </script>
 
 <template>
@@ -68,8 +73,9 @@ const ballR = computed(() => width.value / 2 - 3);
       >
         <q-list>
           <ToggleMenuContent
-            :settings-key="ACTIVE_KEY"
+            :model-value="isActive"
             label="CIP Active"
+            @update:model-value="toggleActive()"
           />
           <SizeMenuContent
             :min="{ width: 1, height: 2 }"

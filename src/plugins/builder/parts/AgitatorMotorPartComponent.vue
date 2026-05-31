@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { DEFAULT_SIZE, RUNNING_KEY } from '../blueprints/AgitatorMotor';
 import { usePart } from '../composables';
 
 const { settings, width, height } = usePart.setup();
 
 const isRunning = computed(() => settings.value[RUNNING_KEY] ?? false);
+
+function toggleRunning(): void {
+  settings.value[RUNNING_KEY] = !isRunning.value;
+}
 </script>
 
 <template>
@@ -90,8 +95,9 @@ const isRunning = computed(() => settings.value[RUNNING_KEY] ?? false);
       >
         <q-list>
           <ToggleMenuContent
-            :settings-key="RUNNING_KEY"
+            :model-value="isRunning"
             label="Running"
+            @update:model-value="toggleRunning()"
           />
           <SizeMenuContent
             :min="{ width: 1, height: 2 }"
