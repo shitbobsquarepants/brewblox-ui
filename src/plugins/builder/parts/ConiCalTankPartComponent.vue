@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { usePart } from '../composables';
 import { useIndustrialStore } from '@/plugins/industrial/store';
 import { DEFAULT_SIZE } from '../blueprints/ConiCalTank';
+import { usePart } from '../composables';
 
 const { width, height, settings } = usePart.setup();
 const store = useIndustrialStore();
@@ -14,9 +14,7 @@ const levelSensor = computed(() =>
 );
 
 const cipBall = computed(() =>
-  settings.value.cipBallId
-    ? store.getCIPBall(settings.value.cipBallId)
-    : null,
+  settings.value.cipBallId ? store.getCIPBall(settings.value.cipBallId) : null,
 );
 
 const levelPct = computed(() => levelSensor.value?.level_pct ?? 0);
@@ -67,9 +65,23 @@ const liquidPath = computed(() => {
     const prog = (topY - cy) / coneH.value;
     const w = iW * (1 - prog) + 10 * prog;
     const x = tipX - w / 2;
-    return [`M ${x} ${topY}`, `L ${x + w} ${topY}`, `L ${tipX + 5} ${bot}`, `L ${tipX - 5} ${bot}`, 'Z'].join(' ');
+    return [
+      `M ${x} ${topY}`,
+      `L ${x + w} ${topY}`,
+      `L ${tipX + 5} ${bot}`,
+      `L ${tipX - 5} ${bot}`,
+      'Z',
+    ].join(' ');
   }
-  return [`M ${WALL} ${topY}`, `L ${VW - WALL} ${topY}`, `L ${VW - WALL} ${cy}`, `L ${tipX + 5} ${bot}`, `L ${tipX - 5} ${bot}`, `L ${WALL} ${cy}`, 'Z'].join(' ');
+  return [
+    `M ${WALL} ${topY}`,
+    `L ${VW - WALL} ${topY}`,
+    `L ${VW - WALL} ${cy}`,
+    `L ${tipX + 5} ${bot}`,
+    `L ${tipX - 5} ${bot}`,
+    `L ${WALL} ${cy}`,
+    'Z',
+  ].join(' ');
 });
 
 const liquidColor = computed(() => {
@@ -92,31 +104,66 @@ const liquidColor = computed(() => {
     </defs>
 
     <!-- Fond -->
-    <path :d="outerPath" fill="#0d0d0d" stroke="none" />
+    <path
+      :d="outerPath"
+      fill="#0d0d0d"
+      stroke="none"
+    />
 
     <!-- Liquide -->
     <g clip-path="url(#conical-clip)">
-      <path v-if="liquidPath" :d="liquidPath" :fill="liquidColor" opacity="0.85" />
+      <path
+        v-if="liquidPath"
+        :d="liquidPath"
+        :fill="liquidColor"
+        opacity="0.85"
+      />
       <line
         v-if="liquidPath && liquidTopY < cylH"
-        :x1="WALL + 2" :y1="liquidTopY + 1"
-        :x2="VW - WALL - 2" :y2="liquidTopY + 1"
-        stroke="rgba(255,255,255,0.15)" stroke-width="1.5"
+        :x1="WALL + 2"
+        :y1="liquidTopY + 1"
+        :x2="VW - WALL - 2"
+        :y2="liquidTopY + 1"
+        stroke="rgba(255,255,255,0.15)"
+        stroke-width="1.5"
       />
     </g>
 
     <!-- Paroi -->
-    <path :d="outerPath" fill="none" stroke="#555" stroke-width="2" />
+    <path
+      :d="outerPath"
+      fill="none"
+      stroke="#555"
+      stroke-width="2"
+    />
 
     <!-- Boule CIP -->
-    <g v-if="cipBall" :transform="`translate(${VW / 2 - 4}, 8)`">
-      <line x1="4" y1="-8" x2="4" y2="2" stroke="#888" stroke-width="2" />
-      <circle cx="4" cy="9" r="7"
+    <g
+      v-if="cipBall"
+      :transform="`translate(${VW / 2 - 4}, 8)`"
+    >
+      <line
+        x1="4"
+        y1="-8"
+        x2="4"
+        y2="2"
+        stroke="#888"
+        stroke-width="2"
+      />
+      <circle
+        cx="4"
+        cy="9"
+        r="7"
         :fill="cipActive ? '#0a2520' : '#111'"
         :stroke="cipActive ? '#4ade80' : '#444'"
         stroke-width="1"
       />
-      <circle cx="4" cy="9" r="2" :fill="cipActive ? '#4ade80' : '#444'" />
+      <circle
+        cx="4"
+        cy="9"
+        r="2"
+        :fill="cipActive ? '#4ade80' : '#444'"
+      />
     </g>
 
     <!-- Niveau % -->
@@ -126,28 +173,52 @@ const liquidColor = computed(() => {
       :y="Math.max(liquidTopY - 4, 14)"
       text-anchor="middle"
       :fill="levelPct < 15 ? '#f87171' : levelPct > 85 ? '#60a5fa' : '#e0e0e0'"
-      font-size="11" font-weight="bold" font-family="monospace"
-    >{{ levelPct.toFixed(0) }}%</text>
+      font-size="11"
+      font-weight="bold"
+      font-family="monospace"
+    >
+      {{ levelPct.toFixed(0) }}%
+    </text>
 
     <!-- Nom -->
-    <text :x="VW / 2" :y="VH - 4"
-      text-anchor="middle" fill="#6b7280"
-      font-size="9" font-family="sans-serif"
-    >{{ tankName }}</text>
+    <text
+      :x="VW / 2"
+      :y="VH - 4"
+      text-anchor="middle"
+      fill="#6b7280"
+      font-size="9"
+      font-family="sans-serif"
+    >
+      {{ tankName }}
+    </text>
 
-    <BuilderInteraction :width="VW" :height="VH">
-      <q-menu touch-position context-menu>
+    <BuilderInteraction
+      :width="VW"
+      :height="VH"
+    >
+      <q-menu
+        touch-position
+        context-menu
+      >
         <q-list>
           <q-item>
-            <q-item-section class="text-caption text-grey">{{ tankName }}</q-item-section>
+            <q-item-section class="text-caption text-grey">
+              {{ tankName }}
+            </q-item-section>
           </q-item>
           <q-item v-if="levelSensor">
             <q-item-section class="text-caption">
-              Niveau : {{ levelPct.toFixed(1) }}%
-              ({{ levelSensor.volume_hl.toFixed(2) }} hL)
+              Niveau : {{ levelPct.toFixed(1) }}% ({{
+                levelSensor.volume_hl.toFixed(2)
+              }}
+              hL)
             </q-item-section>
           </q-item>
-          <SizeMenuContent :min="{width:1,height:3}" :max="{width:6,height:12}" :default="DEFAULT_SIZE" />
+          <SizeMenuContent
+            :min="{ width: 1, height: 3 }"
+            :max="{ width: 6, height: 12 }"
+            :default="DEFAULT_SIZE"
+          />
         </q-list>
       </q-menu>
     </BuilderInteraction>
