@@ -1,4 +1,7 @@
 import { BuilderBlueprint, BuilderType } from '@/plugins/builder/types';
+import AgitatorMotor from './AgitatorMotor';
+import CIPBall from './CIPBall';
+import ConiCalTank from './ConiCalTank';
 import BeerBottle from './BeerBottle';
 import BridgeTube from './BridgeTube';
 import BuilderLabel from './BuilderLabel';
@@ -91,6 +94,9 @@ const blueprints: Record<BuilderType, BuilderBlueprint> = {
   Valve,
   WebframeDisplay,
   WhirlpoolInlet,
+  AgitatorMotor,
+  CIPBall,
+  ConiCalTank,
 };
 
 export default blueprints;
