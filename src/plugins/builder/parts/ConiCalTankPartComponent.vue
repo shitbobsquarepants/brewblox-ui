@@ -84,7 +84,7 @@ const outlinePath = computed(() => {
   const tx = tipX.value;
   const ty = tipY.value;
   return [
-    `M 2 2`,
+    'M 2 2',
     `L ${W - 2} 2`,
     `L ${W - 2} ${ch}`,
     `L ${tx + 2} ${ty}`,
