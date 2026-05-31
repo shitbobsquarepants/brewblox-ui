@@ -147,7 +147,7 @@ const liquidColor = computed(() => {
               ({{ levelSensor.volume_hl.toFixed(2) }} hL)
             </q-item-section>
           </q-item>
-          <SizeMenuContent :default="DEFAULT_SIZE" />
+          <SizeMenuContent :min="{width:1,height:3}" :max="{width:6,height:12}" :default="DEFAULT_SIZE" />
         </q-list>
       </q-menu>
     </BuilderInteraction>
