@@ -2,9 +2,8 @@
 import { computed } from 'vue';
 import { DEFAULT_SIZE } from '../blueprints/AgitatorMotor';
 import { usePart, useSettingsBlock } from '../composables';
-import { ACTUATOR_KEY, DIGITAL_ACTUATOR_TYPES } from '../const';
-import { DigitalState } from 'brewblox-proto/ts';
-import { DigitalActuatorBlockT } from '@/plugins/spark/types';
+import { ACTUATOR_KEY, DIGITAL_TYPES } from '../const';
+import { DigitalState, DigitalBlockT } from 'brewblox-proto/ts';
 import { showAbsentBlock } from '@/plugins/builder/utils';
 
 const { settings, width, height } = usePart.setup();
@@ -15,7 +14,7 @@ const {
   showBlockDialog: showActuatorDialog,
   showBlockSelectDialog: showActuatorSelectDialog,
   patchBlock,
-} = useSettingsBlock.setup<DigitalActuatorBlockT>(ACTUATOR_KEY, DIGITAL_ACTUATOR_TYPES);
+} = useSettingsBlock.setup<DigitalBlockT>(ACTUATOR_KEY, DIGITAL_TYPES);
 
 const isRunning = computed(() =>
   hasActuator.value && actuatorBlock.value
@@ -76,7 +75,7 @@ function toggleRunning(): void {
       r="3"
       :fill="isRunning ? '#4ade80' : '#6b7280'"
     />
-    <BuilderAbsentBlock v-if="showAbsentBlock(actuatorStatus)" :status="actuatorStatus" />
+    <BuilderAbsentBlock :key="ACTUATOR_KEY" :status="actuatorStatus" />
     <BuilderInteraction v-bind="{ width, height }">
       <q-menu touch-position context-menu>
         <q-list>

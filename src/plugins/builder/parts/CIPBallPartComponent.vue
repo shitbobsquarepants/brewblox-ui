@@ -2,9 +2,8 @@
 import { computed } from 'vue';
 import { DEFAULT_SIZE } from '../blueprints/CIPBall';
 import { usePart, useSettingsBlock } from '../composables';
-import { CIP_BALL_KEY, DIGITAL_ACTUATOR_TYPES } from '../const';
-import { DigitalState } from 'brewblox-proto/ts';
-import { DigitalActuatorBlockT } from '@/plugins/spark/types';
+import { CIP_BALL_KEY, DIGITAL_TYPES } from '../const';
+import { DigitalState, DigitalBlockT } from 'brewblox-proto/ts';
 import { showAbsentBlock } from '@/plugins/builder/utils';
 
 const { settings, width, height } = usePart.setup();
@@ -15,7 +14,7 @@ const {
   showBlockDialog: showCipBallDialog,
   showBlockSelectDialog: showCipBallSelectDialog,
   patchBlock,
-} = useSettingsBlock.setup<DigitalActuatorBlockT>(CIP_BALL_KEY, DIGITAL_ACTUATOR_TYPES);
+} = useSettingsBlock.setup<DigitalBlockT>(CIP_BALL_KEY, DIGITAL_TYPES);
 
 const isActive = computed(() =>
   hasCipBall.value && cipBallBlock.value
@@ -92,7 +91,7 @@ function toggleActive(): void {
       r="2.5"
       :fill="isActive ? '#4ade80' : '#6b7280'"
     />
-    <BuilderAbsentBlock v-if="showAbsentBlock(cipBallStatus)" :status="cipBallStatus" />
+    <BuilderAbsentBlock :key="CIP_BALL_KEY" :status="cipBallStatus" />
     <BuilderInteraction v-bind="{ width, height }">
       <q-menu touch-position context-menu>
         <q-list>

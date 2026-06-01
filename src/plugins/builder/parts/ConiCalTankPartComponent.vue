@@ -12,9 +12,9 @@ import {
   MIN_SIZE,
 } from '../blueprints/ConiCalTank';
 import { usePart, useSettingsBlock } from '../composables';
-import { LEVEL_SENSOR_KEY, LEVEL_SENSOR_TYPES } from '../const';
+import { LEVEL_SENSOR_KEY, SENSOR_TYPES } from '../const';
 import { showAbsentBlock } from '@/plugins/builder/utils';
-import { SensorBlockT } from '@/plugins/spark/types';
+import { SensorBlockT } from 'brewblox-proto/ts';
 
 const { settings, width, height } = usePart.setup();
 const {
@@ -23,7 +23,7 @@ const {
   hasAddress: hasLevelSensor,
   showBlockDialog: showLevelSensorDialog,
   showBlockSelectDialog: showLevelSensorSelectDialog,
-} = useSettingsBlock.setup<SensorBlockT>(LEVEL_SENSOR_KEY, LEVEL_SENSOR_TYPES);
+} = useSettingsBlock.setup<SensorBlockT>(LEVEL_SENSOR_KEY, SENSOR_TYPES);
 
 const color = computed<string>(() => colorString(settings.value['color']));
 const levelPct = computed<number>(() =>
@@ -100,7 +100,7 @@ const outlinePath = computed(() => {
     <path :d="liquidPath" :fill="color" opacity="0.9" />
     <path :d="outlinePath" fill="none" stroke="white" stroke-width="2" stroke-linejoin="round" />
     <BuilderLabelValues :width="width" :height="50" />
-    <BuilderAbsentBlock v-if="showAbsentBlock(levelSensorStatus)" :status="levelSensorStatus" />
+    <BuilderAbsentBlock :key="LEVEL_SENSOR_KEY" :status="levelSensorStatus" />
     <BuilderInteraction v-bind="{ width, height }">
       <q-menu touch-position context-menu>
         <q-list>
