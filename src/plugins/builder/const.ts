@@ -211,3 +211,10 @@ export const builderTools: BuilderTool[] = [
     cursor: 'auto',
   },
 ];
+
+// === Constantes pour les parts industriels ===
+export const LEVEL_SENSOR_KEY = 'levelSensorId';
+export const ACTUATOR_KEY = 'actuatorId';
+export const CIP_BALL_KEY = 'cipBallId';
+export const LEVEL_SENSOR_TYPES = ['SensorBlock'];
+export const DIGITAL_ACTUATOR_TYPES = ['DigitalActuatorBlock'];

@@ -1,20 +1,43 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { ACTIVE_KEY, DEFAULT_SIZE } from '../blueprints/CIPBall';
-import { usePart } from '../composables';
+import { DEFAULT_SIZE } from '../blueprints/CIPBall';
+import { usePart, useSettingsBlock } from '../composables';
+import { CIP_BALL_KEY, DIGITAL_ACTUATOR_TYPES } from '../const';
+import { DigitalState } from 'brewblox-proto/ts';
+import { DigitalActuatorBlockT } from '@/plugins/spark/types';
+import { showAbsentBlock } from '@/plugins/builder/utils';
 
 const { settings, width, height } = usePart.setup();
+const {
+  block: cipBallBlock,
+  blockStatus: cipBallStatus,
+  hasAddress: hasCipBall,
+  showBlockDialog: showCipBallDialog,
+  showBlockSelectDialog: showCipBallSelectDialog,
+  patchBlock,
+} = useSettingsBlock.setup<DigitalActuatorBlockT>(CIP_BALL_KEY, DIGITAL_ACTUATOR_TYPES);
 
-const isActive = computed(() => settings.value[ACTIVE_KEY] ?? false);
+const isActive = computed(() =>
+  hasCipBall.value && cipBallBlock.value
+    ? cipBallBlock.value.data.state === DigitalState.STATE_ACTIVE
+    : settings.value['active'] ?? false,
+);
 
 function toggleActive(): void {
-  settings.value[ACTIVE_KEY] = !isActive.value;
+  if (hasCipBall.value && cipBallBlock.value) {
+    patchBlock({
+      data: {
+        state: isActive.value ? DigitalState.STATE_INACTIVE : DigitalState.STATE_ACTIVE,
+      },
+    });
+  } else {
+    settings.value['active'] = !isActive.value;
+  }
 }
 </script>
 
 <template>
   <svg v-bind="{ width, height }">
-    <!-- Supply pipe top -->
     <rect
       :x="width / 2 - 2"
       y="0"
@@ -22,8 +45,6 @@ function toggleActive(): void {
       :height="height * 0.28"
       fill="white"
     />
-
-    <!-- Ball body -->
     <circle
       :cx="width / 2"
       :cy="height / 2 + height * 0.05"
@@ -32,8 +53,6 @@ function toggleActive(): void {
       stroke="white"
       stroke-width="2"
     />
-
-    <!-- Cross inside ball -->
     <line
       :x1="width / 2 - height * 0.2"
       :y1="height / 2 + height * 0.05"
@@ -52,8 +71,6 @@ function toggleActive(): void {
       stroke-width="1.5"
       opacity="0.7"
     />
-
-    <!-- Jets — 8 directions like reference -->
     <g
       v-for="angle in [0, 45, 90, 135, 180, 225, 270, 315]"
       :key="angle"
@@ -69,20 +86,15 @@ function toggleActive(): void {
         stroke-linecap="round"
       />
     </g>
-
-    <!-- Active dot -->
     <circle
       :cx="width - 3"
-      cy="3"
+      :cy="3"
       r="2.5"
       :fill="isActive ? '#4ade80' : '#6b7280'"
     />
-
+    <BuilderAbsentBlock v-if="showAbsentBlock(cipBallStatus)" :status="cipBallStatus" />
     <BuilderInteraction v-bind="{ width, height }">
-      <q-menu
-        touch-position
-        context-menu
-      >
+      <q-menu touch-position context-menu>
         <q-list>
           <ToggleMenuContent
             :model-value="isActive"
@@ -94,6 +106,16 @@ function toggleActive(): void {
             :max="{ width: 3, height: 3 }"
             :default="DEFAULT_SIZE"
           />
+          <q-item clickable @click="showCipBallSelectDialog">
+            <q-item-section>
+              <q-item-label>Assign CIP Ball Actuator</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item v-if="hasCipBall" clickable @click="showCipBallDialog">
+            <q-item-section>
+              <q-item-label>Actuator: {{ cipBallBlock?.service?.id }}</q-item-label>
+            </q-item-section>
+          </q-item>
         </q-list>
       </q-menu>
     </BuilderInteraction>
