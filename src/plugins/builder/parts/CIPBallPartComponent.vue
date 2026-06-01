@@ -1,10 +1,9 @@
 <script setup lang="ts">
+import { DigitalState } from 'brewblox-proto/ts';
 import { computed } from 'vue';
 import { DEFAULT_SIZE } from '../blueprints/CIPBall';
 import { usePart, useSettingsBlock } from '../composables';
 import { CIP_BALL_KEY, DIGITAL_TYPES } from '../const';
-import { DigitalState, DigitalBlockT } from 'brewblox-proto/ts';
-import { showAbsentBlock } from '@/plugins/builder/utils';
 
 const { settings, width, height } = usePart.setup();
 const {
@@ -14,7 +13,7 @@ const {
   showBlockDialog: showCipBallDialog,
   showBlockSelectDialog: showCipBallSelectDialog,
   patchBlock,
-} = useSettingsBlock.setup<DigitalBlockT>(CIP_BALL_KEY, DIGITAL_TYPES);
+} = useSettingsBlock.setup(CIP_BALL_KEY, DIGITAL_TYPES);
 
 const isActive = computed(() =>
   hasCipBall.value && cipBallBlock.value
@@ -26,9 +25,11 @@ function toggleActive(): void {
   if (hasCipBall.value && cipBallBlock.value) {
     patchBlock({
       data: {
-        state: isActive.value ? DigitalState.STATE_INACTIVE : DigitalState.STATE_ACTIVE,
+        state: isActive.value
+          ? DigitalState.STATE_INACTIVE
+          : DigitalState.STATE_ACTIVE,
       },
-    });
+    } as any);
   } else {
     settings.value['active'] = !isActive.value;
   }
@@ -91,9 +92,15 @@ function toggleActive(): void {
       r="2.5"
       :fill="isActive ? '#4ade80' : '#6b7280'"
     />
-    <BuilderAbsentBlock :key="CIP_BALL_KEY" :status="cipBallStatus" />
+    <BuilderAbsentBlock
+      :key="CIP_BALL_KEY"
+      :status="cipBallStatus"
+    />
     <BuilderInteraction v-bind="{ width, height }">
-      <q-menu touch-position context-menu>
+      <q-menu
+        touch-position
+        context-menu
+      >
         <q-list>
           <ToggleMenuContent
             :model-value="isActive"
@@ -105,14 +112,23 @@ function toggleActive(): void {
             :max="{ width: 3, height: 3 }"
             :default="DEFAULT_SIZE"
           />
-          <q-item clickable @click="showCipBallSelectDialog">
+          <q-item
+            clickable
+            @click="showCipBallSelectDialog"
+          >
             <q-item-section>
               <q-item-label>Assign CIP Ball Actuator</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item v-if="hasCipBall" clickable @click="showCipBallDialog">
+          <q-item
+            v-if="hasCipBall"
+            clickable
+            @click="showCipBallDialog"
+          >
             <q-item-section>
-              <q-item-label>Actuator: {{ cipBallBlock?.service?.id }}</q-item-label>
+              <q-item-label>
+                Actuator: {{ cipBallBlock?.serviceId }}
+              </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>

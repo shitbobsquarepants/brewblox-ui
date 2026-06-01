@@ -13,8 +13,6 @@ import {
 } from '../blueprints/ConiCalTank';
 import { usePart, useSettingsBlock } from '../composables';
 import { LEVEL_SENSOR_KEY, SENSOR_TYPES } from '../const';
-import { showAbsentBlock } from '@/plugins/builder/utils';
-import { SensorBlockT } from 'brewblox-proto/ts';
 
 const { settings, width, height } = usePart.setup();
 const {
@@ -23,16 +21,18 @@ const {
   hasAddress: hasLevelSensor,
   showBlockDialog: showLevelSensorDialog,
   showBlockSelectDialog: showLevelSensorSelectDialog,
-} = useSettingsBlock.setup<SensorBlockT>(LEVEL_SENSOR_KEY, SENSOR_TYPES);
+} = useSettingsBlock.setup(LEVEL_SENSOR_KEY, SENSOR_TYPES);
 
 const color = computed<string>(() => colorString(settings.value['color']));
 const levelPct = computed<number>(() =>
   hasLevelSensor.value && levelSensorBlock.value
-    ? levelSensorBlock.value.data.value ?? settings.value[LEVEL_KEY] ?? DEFAULT_LEVEL
+    ? levelSensorBlock.value.data.value ??
+      settings.value[LEVEL_KEY] ??
+      DEFAULT_LEVEL
     : settings.value[LEVEL_KEY] ?? DEFAULT_LEVEL,
 );
-const coneAnglePct = computed<number>(() =>
-  settings.value[CONE_ANGLE_KEY] ?? DEFAULT_CONE_ANGLE,
+const coneAnglePct = computed<number>(
+  () => settings.value[CONE_ANGLE_KEY] ?? DEFAULT_CONE_ANGLE,
 );
 
 // Geometry
@@ -83,7 +83,7 @@ const outlinePath = computed(() => {
   const tx = tipX.value;
   const ty = tipY.value;
   return [
-    `M 2 2`,
+    'M 2 2',
     `L ${W - 2} 2`,
     `L ${W - 2} ${ch}`,
     `L ${tx + 4} ${ty - 6}`,
@@ -97,15 +97,38 @@ const outlinePath = computed(() => {
 
 <template>
   <svg v-bind="{ width, height }">
-    <path :d="liquidPath" :fill="color" opacity="0.9" />
-    <path :d="outlinePath" fill="none" stroke="white" stroke-width="2" stroke-linejoin="round" />
-    <BuilderLabelValues :width="width" :height="50" />
-    <BuilderAbsentBlock :key="LEVEL_SENSOR_KEY" :status="levelSensorStatus" />
+    <path
+      :d="liquidPath"
+      :fill="color"
+      opacity="0.9"
+    />
+    <path
+      :d="outlinePath"
+      fill="none"
+      stroke="white"
+      stroke-width="2"
+      stroke-linejoin="round"
+    />
+    <BuilderLabelValues
+      :width="width"
+      :height="50"
+    />
+    <BuilderAbsentBlock
+      :key="LEVEL_SENSOR_KEY"
+      :status="levelSensorStatus"
+    />
     <BuilderInteraction v-bind="{ width, height }">
-      <q-menu touch-position context-menu>
+      <q-menu
+        touch-position
+        context-menu
+      >
         <q-list>
           <ColorMenuContent />
-          <SizeMenuContent :min="MIN_SIZE" :max="MAX_SIZE" :default="DEFAULT_SIZE" />
+          <SizeMenuContent
+            :min="MIN_SIZE"
+            :max="MAX_SIZE"
+            :default="DEFAULT_SIZE"
+          />
           <SliderMenuContent
             :min="0"
             :max="100"
@@ -122,15 +145,27 @@ const outlinePath = computed(() => {
             label="Cone angle"
             postfix="%"
           />
-          <TextMenuContent :settings-key="LABEL_KEY_TANK" label="Edit label" />
-          <q-item clickable @click="showLevelSensorSelectDialog">
+          <TextMenuContent
+            :settings-key="LABEL_KEY_TANK"
+            label="Edit label"
+          />
+          <q-item
+            clickable
+            @click="showLevelSensorSelectDialog"
+          >
             <q-item-section>
               <q-item-label>Assign Level Sensor</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item v-if="hasLevelSensor" clickable @click="showLevelSensorDialog">
+          <q-item
+            v-if="hasLevelSensor"
+            clickable
+            @click="showLevelSensorDialog"
+          >
             <q-item-section>
-              <q-item-label>Sensor: {{ levelSensorBlock?.service?.id }}</q-item-label>
+              <q-item-label>
+                Sensor: {{ levelSensorBlock?.serviceId }}
+              </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>

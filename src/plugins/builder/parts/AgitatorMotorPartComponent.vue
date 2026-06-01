@@ -1,10 +1,9 @@
 <script setup lang="ts">
+import { DigitalState } from 'brewblox-proto/ts';
 import { computed } from 'vue';
 import { DEFAULT_SIZE } from '../blueprints/AgitatorMotor';
 import { usePart, useSettingsBlock } from '../composables';
 import { ACTUATOR_KEY, DIGITAL_TYPES } from '../const';
-import { DigitalState, DigitalBlockT } from 'brewblox-proto/ts';
-import { showAbsentBlock } from '@/plugins/builder/utils';
 
 const { settings, width, height } = usePart.setup();
 const {
@@ -14,7 +13,7 @@ const {
   showBlockDialog: showActuatorDialog,
   showBlockSelectDialog: showActuatorSelectDialog,
   patchBlock,
-} = useSettingsBlock.setup<DigitalBlockT>(ACTUATOR_KEY, DIGITAL_TYPES);
+} = useSettingsBlock.setup(ACTUATOR_KEY, DIGITAL_TYPES);
 
 const isRunning = computed(() =>
   hasActuator.value && actuatorBlock.value
@@ -26,9 +25,11 @@ function toggleRunning(): void {
   if (hasActuator.value && actuatorBlock.value) {
     patchBlock({
       data: {
-        state: isRunning.value ? DigitalState.STATE_INACTIVE : DigitalState.STATE_ACTIVE,
+        state: isRunning.value
+          ? DigitalState.STATE_INACTIVE
+          : DigitalState.STATE_ACTIVE,
       },
-    });
+    } as any);
   } else {
     settings.value['running'] = !isRunning.value;
   }
@@ -65,9 +66,33 @@ function toggleRunning(): void {
       stroke-width="2"
     />
     <g :transform="`translate(${width / 2}, ${height - 4})`">
-      <line x1="0" y1="0" x2="-8" y2="4" stroke="white" stroke-width="2" stroke-linecap="round" />
-      <line x1="0" y1="0" x2="8" y2="4" stroke="white" stroke-width="2" stroke-linecap="round" />
-      <line x1="0" y1="0" x2="0" y2="6" stroke="white" stroke-width="2" stroke-linecap="round" />
+      <line
+        x1="0"
+        y1="0"
+        x2="-8"
+        y2="4"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+      <line
+        x1="0"
+        y1="0"
+        x2="8"
+        y2="4"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
+      <line
+        x1="0"
+        y1="0"
+        x2="0"
+        y2="6"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+      />
     </g>
     <circle
       :cx="width - 4"
@@ -75,9 +100,15 @@ function toggleRunning(): void {
       r="3"
       :fill="isRunning ? '#4ade80' : '#6b7280'"
     />
-    <BuilderAbsentBlock :key="ACTUATOR_KEY" :status="actuatorStatus" />
+    <BuilderAbsentBlock
+      :key="ACTUATOR_KEY"
+      :status="actuatorStatus"
+    />
     <BuilderInteraction v-bind="{ width, height }">
-      <q-menu touch-position context-menu>
+      <q-menu
+        touch-position
+        context-menu
+      >
         <q-list>
           <ToggleMenuContent
             :model-value="isRunning"
@@ -89,14 +120,23 @@ function toggleRunning(): void {
             :max="{ width: 3, height: 3 }"
             :default="DEFAULT_SIZE"
           />
-          <q-item clickable @click="showActuatorSelectDialog">
+          <q-item
+            clickable
+            @click="showActuatorSelectDialog"
+          >
             <q-item-section>
               <q-item-label>Assign Actuator</q-item-label>
             </q-item-section>
           </q-item>
-          <q-item v-if="hasActuator" clickable @click="showActuatorDialog">
+          <q-item
+            v-if="hasActuator"
+            clickable
+            @click="showActuatorDialog"
+          >
             <q-item-section>
-              <q-item-label>Actuator: {{ actuatorBlock?.service?.id }}</q-item-label>
+              <q-item-label>
+                Actuator: {{ actuatorBlock?.serviceId }}
+              </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
