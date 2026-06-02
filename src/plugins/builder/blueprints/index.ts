@@ -9,7 +9,6 @@ import CIPBall from './CIPBall';
 import Coil from './Coil';
 import Condenser from './Condenser';
 import Conical from './Conical';
-import ConiCalTank from './ConiCalTank';
 import CounterflowChiller from './CounterflowChiller';
 import CrossTube from './CrossTube';
 import DigitalBaseDisplay from './DigitalBaseDisplay';
@@ -96,7 +95,6 @@ const blueprints: Record<BuilderType, BuilderBlueprint> = {
   WhirlpoolInlet,
   AgitatorMotor,
   CIPBall,
-  ConiCalTank,
 };
 
 export default blueprints;

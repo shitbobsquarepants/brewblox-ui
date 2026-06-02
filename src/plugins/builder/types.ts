@@ -50,7 +50,6 @@ export const BuilderType = Enum(
   'WhirlpoolInlet',
   'AgitatorMotor',
   'CIPBall',
-  'ConiCalTank',
 );
 
 export type BuilderType = Enum<typeof BuilderType>;
