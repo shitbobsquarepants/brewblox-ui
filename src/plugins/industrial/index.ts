@@ -7,6 +7,8 @@ import FlowSensorWidget from './FlowSensor';
 import LevelSensorWidget from './LevelSensor';
 import LevelSwitchWidget from './LevelSwitch';
 import PhaseControlWidget from './PhaseControl';
+import SequenceWidget from './Sequence';
+import RecipeWidget from './Recipe';
 import PressureSensorWidget from './PressureSensor';
 import { useIndustrialStore } from './store';
 import type {
@@ -31,6 +33,7 @@ import {
 const plugin: Plugin = {
   install(app) {
     const store = useIndustrialStore();
+    store.start();
 
     // Enregistrer les composants partagés
     globRegister(
@@ -45,6 +48,8 @@ const plugin: Plugin = {
     app.use(LevelSwitchWidget);
     app.use(PhaseControlWidget);
     app.use(AgitatorWidget);
+    app.use(SequenceWidget);
+    app.use(RecipeWidget);
 
     // Écouter les messages MQTT du service brewblox-industrial
     eventbus.subscribe(`${STATE_TOPIC}/+`);

@@ -46,6 +46,7 @@ import UrlDisplay from './UrlDisplay';
 import Valve from './Valve';
 import WebframeDisplay from './WebframeDisplay';
 import WhirlpoolInlet from './WhirlpoolInlet';
+import PhaseControl from './PhaseControl';
 
 const blueprints: Record<BuilderType, BuilderBlueprint> = {
   BeerBottle,
@@ -95,6 +96,7 @@ const blueprints: Record<BuilderType, BuilderBlueprint> = {
   WhirlpoolInlet,
   AgitatorMotor,
   CIPBall,
+  PhaseControl,
 };
 
 export default blueprints;

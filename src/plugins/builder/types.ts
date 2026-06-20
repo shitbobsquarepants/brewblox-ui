@@ -29,6 +29,7 @@ export const BuilderType = Enum(
   'LValve',
   'MetricsDisplay',
   'PidDisplay',
+  'PhaseControl',
   'ProfileDisplay',
   'Pump',
   'PwmDisplay',
