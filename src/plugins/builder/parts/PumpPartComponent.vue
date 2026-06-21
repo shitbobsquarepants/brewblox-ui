@@ -292,6 +292,10 @@ function interactHandler(): void {
               { label: 'Show block', value: 'dialog' },
             ]"
           />
+          <ActuatorMenuContent
+            :block-id="block?.id"
+          />
+
           <BlockMenuContent
             :available="!!block"
             @show="showBlockDialog"

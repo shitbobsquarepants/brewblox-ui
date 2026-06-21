@@ -170,6 +170,10 @@ function toggle(): void {
           >
             <q-item-section>Toggle</q-item-section>
           </q-item>
+          <ActuatorMenuContent
+            :block-id="block?.id"
+          />
+
           <BlockMenuContent
             :available="!!block"
             @show="showBlockDialog"
