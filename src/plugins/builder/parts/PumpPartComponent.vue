@@ -17,6 +17,7 @@ import {
   PwmBlockT,
 } from '@/plugins/builder/const';
 import { liquidOnCoord, showAbsentBlock } from '@/plugins/builder/utils';
+import ActuatorMenuContent from '@/plugins/builder/components/menu/ActuatorMenuContent.vue';
 import { isBlockCompatible } from '@/plugins/spark/utils/info';
 import { ON_INTERACT_KEY, OnInteractBehavior } from '../blueprints/Pump';
 import { usePart, useSettingsBlock } from '../composables';
