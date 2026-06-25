@@ -9,6 +9,31 @@ defineProps<Props>();
 const mode = ref('AUTO');
 const status = ref('MONITORED');
 const tab = ref('control');
+const loading = ref(false);
+
+const apiBase = 'http://192.168.0.40:5000/api/actuators';
+
+async function setMode(newMode: string) {
+  loading.value = true;
+  try {
+    const res = await fetch(`${apiBase}/${blockId}/mode/${newMode}`, { method: 'POST' });
+    if (res.ok) mode.value = newMode;
+  } catch (e) {
+    console.error(e);
+  }
+  loading.value = false;
+}
+
+async function setStatus(newStatus: string) {
+  loading.value = true;
+  try {
+    const res = await fetch(`${apiBase}/${blockId}/status/${newStatus}`, { method: 'POST' });
+    if (res.ok) status.value = newStatus;
+  } catch (e) {
+    console.error(e);
+  }
+  loading.value = false;
+}
 </script>
 
 <template>
@@ -20,67 +45,35 @@ const tab = ref('control');
   </q-item>
 
   <q-item>
-    <q-tabs v-model="tab" dense class="text-white col">
-      <q-tab name="control" label="Control" />
-      <q-tab name="settings" label="Settings" />
-    </q-tabs>
+    <q-item-section class="col">
+      <q-tabs v-model="tab" dense class="text-white">
+        <q-tab name="control" label="Control" />
+        <q-tab name="settings" label="Settings" />
+      </q-tabs>
+    </q-item-section>
   </q-item>
 
-  <q-tab-panels v-model="tab" animated>
-    <q-tab-panel name="control" class="q-pa-sm">
+  <q-item v-show="tab === 'control'" v-ripple class="q-pa-sm">
+    <q-item-section>
       <div class="text-caption text-uppercase q-mb-sm">Mode</div>
       <div class="row q-gutter-xs q-mb-md">
-        <q-btn 
-          flat dense size="sm" 
-          :color="mode === 'AUTO' ? 'positive' : 'grey'" 
-          label="AUTO" 
-          @click.stop="mode = 'AUTO'" 
-          class="col"
-        />
-        <q-btn 
-          flat dense size="sm" 
-          :color="mode === 'MASK' ? 'warning' : 'grey'" 
-          label="MASK" 
-          @click.stop="mode = 'MASK'" 
-          class="col"
-        />
-        <q-btn 
-          flat dense size="sm" 
-          :color="mode === 'MANUAL' ? 'info' : 'grey'" 
-          label="MANUAL" 
-          @click.stop="mode = 'MANUAL'" 
-          class="col"
-        />
-        <q-btn 
-          flat dense size="sm" 
-          :color="mode === 'MAINTENANCE' ? 'negative' : 'grey'" 
-          label="MAINT" 
-          @click.stop="mode = 'MAINTENANCE'" 
-          class="col"
-        />
+        <q-btn flat dense size="sm" :color="mode === 'AUTO' ? 'positive' : 'grey'" label="AUTO" :loading="loading" @click.stop="setMode('AUTO')" class="col" />
+        <q-btn flat dense size="sm" :color="mode === 'MASK' ? 'warning' : 'grey'" label="MASK" :loading="loading" @click.stop="setMode('MASK')" class="col" />
+        <q-btn flat dense size="sm" :color="mode === 'MANUAL' ? 'info' : 'grey'" label="MANUAL" :loading="loading" @click.stop="setMode('MANUAL')" class="col" />
+        <q-btn flat dense size="sm" :color="mode === 'MAINTENANCE' ? 'negative' : 'grey'" label="MAINT" :loading="loading" @click.stop="setMode('MAINTENANCE')" class="col" />
       </div>
 
-      <div v-if="mode === 'MANUAL'" class="text-caption text-uppercase q-mb-sm">Status (Manual Only)</div>
+      <div v-if="mode === 'MANUAL'" class="text-caption text-uppercase q-mb-sm">Status</div>
       <div v-if="mode === 'MANUAL'" class="row q-gutter-xs">
-        <q-btn 
-          flat dense size="sm" 
-          color="positive" 
-          label="ENERGISE" 
-          @click.stop="status = 'ENERGISED'" 
-          class="col"
-        />
-        <q-btn 
-          flat dense size="sm" 
-          color="negative" 
-          label="DE-ENERGISE" 
-          @click.stop="status = 'DE_ENERGISED'" 
-          class="col"
-        />
+        <q-btn flat dense size="sm" color="positive" label="ENERGISE" :loading="loading" @click.stop="setStatus('ENERGISED')" class="col" />
+        <q-btn flat dense size="sm" color="negative" label="DE-ENERGISE" :loading="loading" @click.stop="setStatus('DE_ENERGISED')" class="col" />
       </div>
-    </q-tab-panel>
+    </q-item-section>
+  </q-item>
 
-    <q-tab-panel name="settings" class="q-pa-sm">
+  <q-item v-show="tab === 'settings'" v-ripple class="q-pa-sm">
+    <q-item-section>
       <div class="text-caption">Settings coming soon...</div>
-    </q-tab-panel>
-  </q-tab-panels>
+    </q-item-section>
+  </q-item>
 </template>
