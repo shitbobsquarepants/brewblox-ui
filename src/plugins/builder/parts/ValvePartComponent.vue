@@ -170,7 +170,7 @@ function toggle(): void {
           >
             <q-item-section>Toggle</q-item-section>
           </q-item>
-          <q-item-label>Test Actuator</q-item-label>
+          <ActuatorMenuContent :block-id="block?.id" />
 
           <BlockMenuContent
             :available="!!block"
